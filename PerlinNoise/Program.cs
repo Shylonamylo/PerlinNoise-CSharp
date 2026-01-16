@@ -11,20 +11,56 @@ namespace PerlinNoise
         }
         static void Main(string[] args)
         {
-
-            var PerlinNoise = new PerlinNoise(23,0,0,16,16,1,2,2,10);
-            Console.WriteLine(PerlinNoise.Noise.Count);
-            for (int i = 0; i < (int)Math.Sqrt(PerlinNoise.Noise.Count); i++)
+            bool Press = false;
+            int X = 0;
+            int Y = 0;
+            while (true) 
             {
-                for (int j = 0; j < (int)Math.Sqrt(PerlinNoise.Noise.Count); j++)
+                if (Press)
                 {
-                    double Component = Interpolate(0, 255, (PerlinNoise.Noise[(i * (int)Math.Sqrt(PerlinNoise.Noise.Count)) + j] + 1) * 0.5);
-                    Color myColor = Color.FromArgb((int)Component, (int)Component, (int)Component);
-                    string hex = myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
-                    Console.Write("■".Pastel(hex) + " ");
+                    Console.SetCursorPosition(0, 0);
+                    var PerlinNoise = new PerlinNoise(23, X, Y, 32, 32, 1, 2, 2, 10);
+                    Console.WriteLine(PerlinNoise.Noise.Count);
+                    for (int i = 0; i < (int)Math.Sqrt(PerlinNoise.Noise.Count); i++)
+                    {
+                        for (int j = 0; j < (int)Math.Sqrt(PerlinNoise.Noise.Count); j++)
+                        {
+                            double Component = Interpolate(0, 255, (PerlinNoise.Noise[(i * (int)Math.Sqrt(PerlinNoise.Noise.Count)) + j] + 1) * 0.5);
+                            Color myColor = Color.FromArgb((int)Component, (int)Component, (int)Component);
+                            string hex = myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
+                            Console.Write("■".Pastel(hex) + " ");
+                        }
+                        Console.WriteLine();
+                    }
+                    Press = false;
+                    Thread.Sleep(100);
                 }
-                Console.WriteLine();
+                if (Console.ReadKey().Key == ConsoleKey.DownArrow)
+                {
+                    Y++;
+                    Press = true;
+                }
+                if (Console.ReadKey().Key == ConsoleKey.UpArrow)
+                {
+                    Y--;
+                    Press = true;
+                }
+                if (Console.ReadKey().Key == ConsoleKey.RightArrow)
+                {
+                    X++;
+                    Press = true;
+                }
+                if (Console.ReadKey().Key == ConsoleKey.LeftArrow)
+                {
+                    X--;
+                    Press = true;
+                }
+                if(Console.ReadKey().Key == ConsoleKey.Escape)
+                {
+                    break;
+                }
             }
+            Console.ReadLine();
         }
     }
 }
